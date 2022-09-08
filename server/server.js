@@ -5,7 +5,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import axios from 'axios';
-import { writeFile } from 'fs';
+import { writeFile, readdir, readFile } from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -18,6 +18,7 @@ app.use(bodyParser.json());
 
 const X_RAPID_API_HOST = "call-of-duty-vanguard.p.rapidapi.com";
 
+const USERS_DIR = `${__dirname}/users`;
 
 
 app.post('/addUser', (req, res) => {
@@ -40,14 +41,13 @@ app.post('/addUser', (req, res) => {
 
 app.get('/refreshUsersStats', async (req, res) => {
 
-    const usersCredentials = getUsersCredentials();
-
+    const usersCredentials = await getAllUsersCredentials();
     for (const userCredentials of usersCredentials) {
         const userStats = await fetchUserStats(userCredentials);
         if (!userStats) {
             return res.status(400).send('failed to fetch user stats');
         }
-        saveUserStats(userCredentials.userName, userStats);
+        await saveUserDataToAFile(userCredentials.userName, { userCredentials, userStats });
     }
 
 
@@ -55,16 +55,30 @@ app.get('/refreshUsersStats', async (req, res) => {
 
 });
 
-const saveUserStats = (userName, userStats) => {
 
-};
-
-const getUsersCredentials = () => {
+const getAllUsersCredentials = async () => {
+    const usersCredentials = [];
+    try {
+        const filenames = await readdir(USERS_DIR);
+        for (const fileName of filenames) {
+            try {
+                const fileContent = JSON.parse(await readFile(`${USERS_DIR}/${fileName}`));
+                usersCredentials.push(fileContent.userCredentials);
+            } catch (err) {
+                console.log(err);
+                // not sure if to continue
+            }
+        }
+    } catch (err) {
+        console.log(err);
+        return null;
+    }
+    return usersCredentials;
 
 };
 
 const fetchUserStats = async (userCredentials) => {
-    const { username, activisionId, platform } = userCredentials;
+    const { userName, activisionId, platform } = userCredentials;
     try {
         const { data } = await axios.get(`https://call-of-duty-vanguard.p.rapidapi.com/${platform}/user/${userName}#${activisionId}`, {
             headers: {
@@ -80,9 +94,9 @@ const fetchUserStats = async (userCredentials) => {
 };
 
 
-const saveUserDataToAFile = (userData) => {
+const saveUserDataToAFile = async (userName, userData) => {
     // console.log(__dirname);
-    writeFile(`${__dirname}/users/${userData.userCredentials.userName}.json`,
+    await writeFile(`${USERS_DIR}/${userName}.json`,
         JSON.stringify(userData, null, 2),
         (err) => console.log(err));
 
