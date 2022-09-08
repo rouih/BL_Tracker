@@ -21,7 +21,7 @@ const X_RAPID_API_HOST = "call-of-duty-vanguard.p.rapidapi.com";
 const USERS_DIR = `${__dirname}/users`;
 
 
-app.post('/addUser', (req, res) => {
+app.post('/addUser', async (req, res) => {
     const { userName, activisionId, platform } = req.body;
     if (!userName || !activisionId || !platform)
         return res.status(400).send('missing information');
@@ -34,8 +34,14 @@ app.post('/addUser', (req, res) => {
         },
         stats: {}
     };
-    saveUserDataToAFile(userData);
-    res.send(`User ${userData.userCredentials.userName} has been created successfully`);
+    try {
+
+        await saveUserDataToAFile(userData);
+        res.send(`User ${userData.userCredentials.userName} has been created successfully`);
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Failed to create user");
+    }
 });
 
 
