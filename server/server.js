@@ -9,6 +9,7 @@ import { writeFile, readdir, readFile } from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
 config();
 
 const app = express();
@@ -21,7 +22,7 @@ const X_RAPID_API_HOST = "call-of-duty-vanguard.p.rapidapi.com";
 const USERS_DIR = `${__dirname}/users`;
 
 
-app.post('/addUser', (req, res) => {
+app.post('/addUser', async (req, res) => {
     const { userName, activisionId, platform } = req.body;
     if (!userName || !activisionId || !platform)
         return res.status(400).send('missing information');
@@ -34,14 +35,23 @@ app.post('/addUser', (req, res) => {
         },
         stats: {}
     };
-    saveUserDataToAFile(userData);
-    res.send(`User ${userData.userCredentials.userName} has been created successfully`);
+    try {
+
+        await saveUserDataToAFile(userData);
+        res.send(`User ${userData.userCredentials.userName} has been created successfully`);
+    } catch (err) {
+        console.log(err);
+        res.status(400).send("Failed to create user");
+    }
 });
 
 
 app.get('/refreshUsersStats', async (req, res) => {
 
     const usersCredentials = await getAllUsersCredentials();
+    if (!usersCredentials)
+        return res.status(400).send("Failed to get users data");
+
     for (const userCredentials of usersCredentials) {
         const userStats = await fetchUserStats(userCredentials);
         if (!userStats) {
@@ -56,14 +66,22 @@ app.get('/refreshUsersStats', async (req, res) => {
 });
 
 
+
 const getAllUsersCredentials = async () => {
-    const usersCredentials = [];
+    const usersData = await getAllUsersData();
+    if (!usersData) return null;
+    return usersData.map(userData => userData.userCredentials);
+
+};
+
+const getAllUsersData = async () => {
+    const usersData = [];
     try {
         const filenames = await readdir(USERS_DIR);
         for (const fileName of filenames) {
             try {
                 const fileContent = JSON.parse(await readFile(`${USERS_DIR}/${fileName}`));
-                usersCredentials.push(fileContent.userCredentials);
+                usersData.push(fileContent);
             } catch (err) {
                 console.log(err);
                 // not sure if to continue
@@ -73,8 +91,7 @@ const getAllUsersCredentials = async () => {
         console.log(err);
         return null;
     }
-    return usersCredentials;
-
+    return usersData;
 };
 
 const fetchUserStats = async (userCredentials) => {
