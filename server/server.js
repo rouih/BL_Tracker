@@ -19,14 +19,6 @@ app.use(bodyParser.json());
 const X_RAPID_API_HOST = "call-of-duty-vanguard.p.rapidapi.com";
 
 
-const saveUserDataToAFile = (userData) => {
-    // console.log(__dirname);
-    writeFile(`${__dirname}/users/${userData.userCredentials.userName}.json`,
-        JSON.stringify(userData, null, 2),
-        (err) => console.log(err));
-
-};
-
 
 app.post('/addUser', (req, res) => {
     const { userName, activisionId, platform } = req.body;
@@ -46,11 +38,33 @@ app.post('/addUser', (req, res) => {
 });
 
 
-app.post('/userStats', async (req, res) => {
-    const { userName, activisionId, platform } = req.body;
-    if (!userName || !activisionId || !platform)
-        return res.status(400).send('missing information');
+app.get('/refreshUsersStats', async (req, res) => {
 
+    const usersCredentials = getUsersCredentials();
+
+    for (const userCredentials of usersCredentials) {
+        const userStats = await fetchUserStats(userCredentials);
+        if (!userStats) {
+            return res.status(400).send('failed to fetch user stats');
+        }
+        saveUserStats(userCredentials.userName, userStats);
+    }
+
+
+    return res.send('Stats refreshed successfully');
+
+});
+
+const saveUserStats = (userName, userStats) => {
+
+};
+
+const getUsersCredentials = () => {
+
+};
+
+const fetchUserStats = async (userCredentials) => {
+    const { username, activisionId, platform } = userCredentials;
     try {
         const { data } = await axios.get(`https://call-of-duty-vanguard.p.rapidapi.com/${platform}/user/${userName}#${activisionId}`, {
             headers: {
@@ -58,12 +72,21 @@ app.post('/userStats', async (req, res) => {
                 'X-RapidAPI-Host': X_RAPID_API_HOST
             }
         });
-        res.send(data);
+        return data;
     } catch (err) {
         console.log(err);
-        res.status(200).send(err.message);
+        return null;
     }
+};
 
-});
+
+const saveUserDataToAFile = (userData) => {
+    // console.log(__dirname);
+    writeFile(`${__dirname}/users/${userData.userCredentials.userName}.json`,
+        JSON.stringify(userData, null, 2),
+        (err) => console.log(err));
+
+};
+
 
 app.listen(3000, () => console.log("listening on port 3000"));
