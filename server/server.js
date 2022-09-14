@@ -57,7 +57,7 @@ app.get('/refreshUsersStats', async (req, res) => {
         if (!userStats) {
             return res.status(400).send('failed to fetch user stats');
         }
-        await saveUserDataToAFile(userCredentials.userName, { userCredentials, userStats });
+        await saveUserDataToAFile({ userCredentials, userStats});
     }
 
 
@@ -111,13 +111,13 @@ const fetchUserStats = async (userCredentials) => {
 };
 
 
-const saveUserDataToAFile = async (userName, userData) => {
+const saveUserDataToAFile = async (userData) => {
     // console.log(__dirname);
-    await writeFile(`${USERS_DIR}/${userName}.json`,
+    await writeFile(`${USERS_DIR}/${userData.userCredentials.userName}.json`,
         JSON.stringify(userData, null, 2),
         (err) => console.log(err));
 
 };
 
 
-app.listen(3000, () => console.log("listening on port 3000"));
+app.listen(4000, () => console.log("listening on port 4000"));
