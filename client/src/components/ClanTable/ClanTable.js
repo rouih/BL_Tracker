@@ -14,7 +14,6 @@ import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import classes from './ClanTable.module.css';
 
-
 function createData(playerID, playerName, playerED, playerBestMatchElim, playerEPG, playerWinPercentage, playerAccuracy, playerHSAccuracy, playerGamesAmount) {
     return {
         playerID,
@@ -30,14 +29,14 @@ function createData(playerID, playerName, playerED, playerBestMatchElim, playerE
 }
 
 const rows = [
-    createData('5732522', 'Viktor', 1.43, 51, 14.44, '41.50%', '16.90%', 20.60, 171),
-    createData('8694763', 'JarringStream43', 1.40, 38, 13.14, '44.90%', '18.80%', 13.70, 185),
-    createData('3729397', 'shlomile', 1.29, 67, 15.66, '43.30%', '15.70%', 15.60, 282),
-    createData('9612709', 'vAKN1N', 1.22, 41, 11.08, '48.40%', '18.40%', 35.80, 155),
-    createData('5632400', 'harel62', 1.20, 30, 7.58, '32.00%', '14.30%', 19.50, 78),
-    createData('8094996', 'Hatch97', 1.12, 39, 10.26, '42.30%', '16.90%', 8.90, 111),
-    createData('7300902', 'iNo Eliran2508', 0.99, 26, 5.8, '28.70%', '26.20%', 21.60, 94),
-    createData('21965', 'MOSHE', 0.88, 36, 10.28, '50.00%', '10.20%', 6.80, 102),
+    createData('5732522', 'Viktor', 1.43, 51, 14.59, 42.20, 16.90, 20.40, 173),
+    createData('8694763', 'JarringStream43', 1.40, 38, 13.11, 45.30, 18.80, 13.60, 190),
+    createData('3729397', 'shlomile', 1.29, 67, 15.66, 43.30, 15.70, 15.60, 282),
+    createData('9612709', 'vAKN1N', 1.22, 41, 11.08, 48.40, 18.40, 35.80, 155),
+    createData('5632400', 'harel62', 1.23, 30, 8.45, 33.70, 13.80, 17.40, 92),
+    createData('8094996', 'Hatch97', 1.11, 39, 10.42, 43.90, 17.00, 8.70, 114),
+    createData('7300902', 'iNo Eliran2508', 0.99, 26, 5.80, 28.70, 26.20, 21.60, 94),
+    createData('21965', 'MOSHE', 0.88, 36, 10.28, 50.0, 10.20, 6.80, 102),
 ];
 
 function descendingComparator(a, b, orderBy) {
@@ -145,7 +144,13 @@ function EnhancedTableHead(props) {
                         sortDirection={orderBy === headCell.id ? order : false}
                         classes={{ root: classes.sortDesign, active: classes.activeSortDesign, hover: classes.activeSortDesign }}
                     >
-                        <TableSortLabel
+                        <TableSortLabel sx={
+                            {
+                                '& .MuiTableSortLabel-icon': {
+                                    color: 'red !important',
+                                },
+                            }
+                        }
                             active={orderBy === headCell.id}
                             direction={orderBy === headCell.id ? order : 'asc'}
                             onClick={createSortHandler(headCell.id)}
@@ -153,7 +158,7 @@ function EnhancedTableHead(props) {
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
-                                <Box component="span" sx={visuallyHidden} classes={{ root: classes.sortDesign, active: classes.activeSortDesign, hover: classes.activeSortDesign }}>
+                                <Box component="span" sx={visuallyHidden}>
                                     {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
                                 </Box>
                             ) : null}
@@ -314,8 +319,8 @@ export default function EnhancedTable() {
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerED}</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerBestMatchElim}</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerEPG}</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerWinPercentage}</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerAccuracy}</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerWinPercentage} %</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerAccuracy} %</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerHSAccuracy} %</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerGamesAmount}</TableCell>
                                         </TableRow>
