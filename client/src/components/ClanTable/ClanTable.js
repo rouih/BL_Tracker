@@ -14,7 +14,7 @@ import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import classes from './ClanTable.module.css';
 
-function createData(playerID, playerName, playerED, playerBestMatchElim, playerEPG, playerWinPercentage, playerAccuracy, playerHSAccuracy, playerGamesAmount) {
+function createData(playerID, playerName, playerED, playerBestMatchElim, playerEPG, playerWinPercentage, playerAccuracy, playerHSAccuracy, playerGamesPlayed) {
     return {
         playerID,
         playerName,
@@ -24,7 +24,7 @@ function createData(playerID, playerName, playerED, playerBestMatchElim, playerE
         playerWinPercentage,
         playerAccuracy,
         playerHSAccuracy,
-        playerGamesAmount
+        playerGamesPlayed
     };
 }
 
@@ -119,10 +119,10 @@ const headCells = [
         label: 'HS Accuracy',
     },
     {
-        id: 'playerGamesAmount',
+        id: 'playerGamesPlayed',
         numeric: true,
         disablePadding: false,
-        label: 'Games Amount',
+        label: 'Games Played',
     },
 ];
 
@@ -170,17 +170,12 @@ function EnhancedTableHead(props) {
     );
 }
 EnhancedTableHead.propTypes = {
-    numSelected: PropTypes.number.isRequired,
     onRequestSort: PropTypes.func.isRequired,
-    onSelectAllClick: PropTypes.func.isRequired,
     order: PropTypes.oneOf(['asc', 'desc']).isRequired,
     orderBy: PropTypes.string.isRequired,
-    rowCount: PropTypes.number.isRequired,
 };
 
 const EnhancedTableToolbar = (props) => {
-    const { numSelected } = props;
-
     return (
         <Toolbar className={classes.titleDesign}
             sx={{
@@ -193,6 +188,7 @@ const EnhancedTableToolbar = (props) => {
                 variant="h6"
                 id="tableTitle"
                 component="div"
+                align='center'
                 className={classes.titleDesign}
             >
                 BL Clan Table
@@ -201,17 +197,9 @@ const EnhancedTableToolbar = (props) => {
     );
 };
 
-EnhancedTableToolbar.propTypes = {
-    numSelected: PropTypes.number.isRequired,
-};
-
 export default function EnhancedTable() {
-    const [order, setOrder] = React.useState('asc');
-    const [orderBy, setOrderBy] = React.useState('playerID');
-    const [selected, setSelected] = React.useState([]);
-    const [page, setPage] = React.useState(0);
-    const [dense, setDense] = React.useState(false);
-    const [rowsPerPage, setRowsPerPage] = React.useState(8);
+    const [order, setOrder] = React.useState('desc');
+    const [orderBy, setOrderBy] = React.useState('playerED');
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
@@ -219,95 +207,31 @@ export default function EnhancedTable() {
         setOrderBy(property);
     };
 
-    const handleSelectAllClick = (event) => {
-        if (event.target.checked) {
-            const newSelected = rows.map((n) => n.name);
-            setSelected(newSelected);
-            return;
-        }
-        setSelected([]);
-    };
-
-    const handleClick = (event, name) => {
-        const selectedIndex = selected.indexOf(name);
-        let newSelected = [];
-
-        if (selectedIndex === -1) {
-            newSelected = newSelected.concat(selected, name);
-        } else if (selectedIndex === 0) {
-            newSelected = newSelected.concat(selected.slice(1));
-        } else if (selectedIndex === selected.length - 1) {
-            newSelected = newSelected.concat(selected.slice(0, -1));
-        } else if (selectedIndex > 0) {
-            newSelected = newSelected.concat(
-                selected.slice(0, selectedIndex),
-                selected.slice(selectedIndex + 1),
-            );
-        }
-
-        setSelected(newSelected);
-    };
-
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(parseInt(event.target.value, 10));
-        setPage(0);
-    };
-
-    const handleChangeDense = (event) => {
-        setDense(event.target.checked);
-    };
-
-    const isSelected = (name) => selected.indexOf(name) !== -1;
-
-    // Avoid a layout jump when reaching the last page with empty rows.
-    const emptyRows =
-        page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
-
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <EnhancedTableToolbar numSelected={selected.length} />
+                <EnhancedTableToolbar />
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
-                        aria-labelledby="tableTitle"
-                        size={dense ? 'small' : 'medium'}
                         className={classes.tableDesign}
                     >
                         <EnhancedTableHead
-                            numSelected={selected.length}
                             order={order}
                             orderBy={orderBy}
-                            onSelectAllClick={handleSelectAllClick}
                             onRequestSort={handleRequestSort}
-                            rowCount={rows.length}
                         />
                         <TableBody>
-                            {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
                             {stableSort(rows, getComparator(order, orderBy))
-                                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                                .map((row, index) => {
-                                    const isItemSelected = isSelected(row.name);
-                                    const labelId = `enhanced-table-checkbox-${index}`;
-
+                                .map((row) => {
                                     return (
                                         <TableRow
                                             hover
-                                            onClick={(event) => handleClick(event, row.name)}
-                                            role="checkbox"
-                                            aria-checked={isItemSelected}
                                             tabIndex={-1}
                                             key={row.name}
-                                            selected={isItemSelected}
                                         >
                                             <TableCell
                                                 component="th"
-                                                id={labelId}
                                                 scope="row"
                                                 align='center'
                                                 padding="none"
@@ -322,19 +246,10 @@ export default function EnhancedTable() {
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerWinPercentage} %</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerAccuracy} %</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerHSAccuracy} %</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerGamesAmount}</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerGamesPlayed}</TableCell>
                                         </TableRow>
                                     );
                                 })}
-                            {emptyRows > 0 && (
-                                <TableRow
-                                    style={{
-                                        height: (dense ? 33 : 53) * emptyRows,
-                                    }}
-                                >
-                                    <TableCell colSpan={6} />
-                                </TableRow>
-                            )}
                         </TableBody>
                     </Table>
                 </TableContainer>
