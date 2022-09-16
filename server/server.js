@@ -14,6 +14,8 @@ app.use(bodyParser.json());
 
 const X_RAPID_API_HOST = "call-of-duty-vanguard.p.rapidapi.com";
 
+const API_REQUEST_DELAY_MS = 60 * 1000; // delay of one minute to allow follow up API requests to work
+const delayApiRequest = ms => new Promise(res => setTimeout(res, ms));
 
 app.post('/addUser', async (req, res) => {
     const { userName, activisionId, platform } = req.body;
@@ -56,7 +58,13 @@ app.get('/refreshUsersStats', async (req, res) => {
     if (!usersCredentials)
         return res.status(400).send("Failed to get users data");
 
+    let isFirstRequest = true;
     for (const userCredentials of usersCredentials) {
+
+        if (isFirstRequest) isFirstRequest = false;
+        // delay the next request because the api allows only one request per minute
+        else await delayApiRequest(API_REQUEST_DELAY_MS);
+
         const userStats = await fetchUserStats(userCredentials);
         if (!userStats)
             return res.status(400).send('failed to fetch user stats');
@@ -89,9 +97,10 @@ const fetchUserStats = async (userCredentials) => {
                 'X-RapidAPI-Host': X_RAPID_API_HOST
             }
         });
-        return data;
+
+        return data.summary;
     } catch (err) {
-        console.log(err);
+        console.error(err);
         return null;
     }
 };
