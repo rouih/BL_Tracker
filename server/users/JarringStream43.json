@@ -4,46 +4,71 @@
     "activisionId": "8694763",
     "platform": "xbl"
   },
-  "userStats": {
-    "gamertag": "JarringStream43",
-    "platform": "xbl",
-    "game": "Vanguard",
-    "gameFmt": "Call of Duty: Vanguard",
-    "summary": {
-      "playTime": "20h",
-      "totalMatches": "173",
-      "kdRatio": "1.40",
-      "winPercent": "45.1%",
-      "scorePerMinute": "305",
-      "bestMatchKills": "38",
-      "killCount": "2,287",
-      "deathCount": "2,090",
-      "assistCount": "630",
-      "headshotCount": "314",
-      "headshotPercent": "13.7%",
-      "suicideCount": "9",
-      "killsPerMatch": "13.22",
-      "killsPerMinute": "1.82",
-      "winCount": "78",
-      "lossCount": "77",
-      "score": "383,580",
-      "scorePerMatch": "2,217",
-      "accuracy": {
-        "percent": "19.6%",
-        "hits": "3,358",
-        "misses": "13,764"
-      },
-      "headshotAccuracy": {
-        "percent": "13.7%",
-        "headshots": "314"
+  "userImg": "",
+  "userStatsRecord": [
+    {
+      "time": "2022-09-17T18:12:03.809Z",
+      "stats": {
+        "playTime": "27h",
+        "totalMatches": "228",
+        "kdRatio": "1.45",
+        "winPercent": "43.4%",
+        "scorePerMinute": "319",
+        "bestMatchKills": "55",
+        "killCount": "3,244",
+        "deathCount": "2,827",
+        "assistCount": "848",
+        "headshotCount": "548",
+        "headshotPercent": "16.9%",
+        "suicideCount": "15",
+        "killsPerMatch": "14.23",
+        "killsPerMinute": "1.94",
+        "winCount": "99",
+        "lossCount": "108",
+        "score": "532,552",
+        "scorePerMatch": "2,336",
+        "accuracy": {
+          "percent": "17.9%",
+          "hits": "6,194",
+          "misses": "28,361"
+        },
+        "headshotAccuracy": {
+          "percent": "16.9%",
+          "headshots": "548"
+        }
       }
     },
-    "time": {
-      "startTime": "2022-09-08T16:44:34.421Z",
-      "endTime": "2022-09-08T16:44:40.695Z",
-      "timezone": "UTC",
-      "durationInMS": 6274
-    },
-    "status": 200
-  }
+    {
+      "time": "2022-09-17T18:13:22.447Z",
+      "stats": {
+        "playTime": "27h",
+        "totalMatches": "228",
+        "kdRatio": "1.45",
+        "winPercent": "43.4%",
+        "scorePerMinute": "319",
+        "bestMatchKills": "55",
+        "killCount": "3,244",
+        "deathCount": "2,827",
+        "assistCount": "848",
+        "headshotCount": "548",
+        "headshotPercent": "16.9%",
+        "suicideCount": "15",
+        "killsPerMatch": "14.23",
+        "killsPerMinute": "1.94",
+        "winCount": "99",
+        "lossCount": "108",
+        "score": "532,552",
+        "scorePerMatch": "2,336",
+        "accuracy": {
+          "percent": "17.9%",
+          "hits": "6,194",
+          "misses": "28,361"
+        },
+        "headshotAccuracy": {
+          "percent": "16.9%",
+          "headshots": "548"
+        }
+      }
+    }
+  ]
 }
