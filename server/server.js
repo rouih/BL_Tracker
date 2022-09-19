@@ -45,7 +45,6 @@ app.post('/addUser', async (req, res) => {
     }
 });
 
-
 app.get('/refreshUsersStats', async (req, res) => {
 
     const usersCredentials = await getAllUsersCredentials();
@@ -57,7 +56,7 @@ app.get('/refreshUsersStats', async (req, res) => {
         if (!userStats) {
             return res.status(400).send('failed to fetch user stats');
         }
-        await saveUserDataToAFile({ userCredentials, userStats});
+        await saveUserDataToAFile({ userCredentials, userStats });
     }
 
 
@@ -112,7 +111,6 @@ const fetchUserStats = async (userCredentials) => {
 
 
 const saveUserDataToAFile = async (userData) => {
-    // console.log(__dirname);
     await writeFile(`${USERS_DIR}/${userData.userCredentials.userName}.json`,
         JSON.stringify(userData, null, 2),
         (err) => console.log(err));

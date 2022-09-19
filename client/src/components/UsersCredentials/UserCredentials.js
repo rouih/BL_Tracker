@@ -7,6 +7,7 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Modal from '@mui/material/Modal';
 import classes from './UserCredentials.module.css';
+import IconPicker from './IconPicker/IconPicker';
 
 export default function UserCredentials() {
 
@@ -43,6 +44,7 @@ export default function UserCredentials() {
                     })}
                 </Select>
                 <button className={classes.submitButton} onClick={clickHandler}>Submit</button>
+                <IconPicker/>
             </Box>
         </Modal>
     </>
