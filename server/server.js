@@ -37,7 +37,7 @@ app.post('/addUser', async (req, res) => {
     };
     try {
 
-        await saveUserDataToAFile(userData);
+        await saveUserDataToAFile(userName,userData);
         res.send(`User ${userData.userCredentials.userName} has been created successfully`);
     } catch (err) {
         console.log(err);
@@ -63,6 +63,16 @@ app.get('/refreshUsersStats', async (req, res) => {
 
     return res.send('Stats refreshed successfully');
 
+});
+
+
+app.get('/getAllUsersData', async (req, res) => {
+    const usersData = await getAllUsersData();
+    if (!usersData) {
+        return res.status(400).send("Failed to get users data");
+    }
+
+    return res.send(usersData);
 });
 
 
@@ -96,6 +106,7 @@ const getAllUsersData = async () => {
 
 const fetchUserStats = async (userCredentials) => {
     const { userName, activisionId, platform } = userCredentials;
+    console.log(userName, activisionId, platform);
     try {
         const { data } = await axios.get(`https://call-of-duty-vanguard.p.rapidapi.com/${platform}/user/${userName}#${activisionId}`, {
             headers: {
@@ -120,4 +131,4 @@ const saveUserDataToAFile = async (userName, userData) => {
 };
 
 
-app.listen(3000, () => console.log("listening on port 3000"));
+app.listen(4000, () => console.log("listening on port 4000"));

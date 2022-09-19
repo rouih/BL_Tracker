@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
@@ -13,31 +13,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import { visuallyHidden } from '@mui/utils';
 import classes from './ClanTable.module.css';
-
-function createData(playerID, playerName, playerED, playerBestMatchElim, playerEPG, playerWinPercentage, playerAccuracy, playerHSAccuracy, playerGamesPlayed) {
-    return {
-        playerID,
-        playerName,
-        playerED,
-        playerBestMatchElim,
-        playerEPG,
-        playerWinPercentage,
-        playerAccuracy,
-        playerHSAccuracy,
-        playerGamesPlayed
-    };
-}
-
-const rows = [
-    createData('5732522', 'Viktor', 1.43, 51, 14.59, 42.20, 16.90, 20.40, 173),
-    createData('8694763', 'JarringStream43', 1.40, 38, 13.11, 45.30, 18.80, 13.60, 190),
-    createData('3729397', 'shlomile', 1.29, 67, 15.66, 43.30, 15.70, 15.60, 282),
-    createData('9612709', 'vAKN1N', 1.22, 41, 11.08, 48.40, 18.40, 35.80, 155),
-    createData('5632400', 'harel62', 1.23, 30, 8.45, 33.70, 13.80, 17.40, 92),
-    createData('8094996', 'Hatch97', 1.11, 39, 10.42, 43.90, 17.00, 8.70, 114),
-    createData('7300902', 'iNo Eliran2508', 0.99, 26, 5.80, 28.70, 26.20, 21.60, 94),
-    createData('21965', 'MOSHE', 0.88, 36, 10.28, 50.0, 10.20, 6.80, 102),
-];
+import axios from 'axios';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -72,7 +48,7 @@ function stableSort(array, comparator) {
 const headCells = [
     {
         id: 'playerID',
-        numeric: false,
+        numeric: true,
         disablePadding: true,
         label: 'ID',
     },
@@ -198,14 +174,59 @@ const EnhancedTableToolbar = (props) => {
 };
 
 export default function EnhancedTable() {
-    const [order, setOrder] = React.useState('desc');
-    const [orderBy, setOrderBy] = React.useState('playerED');
+    const [rows, setRows] = useState([])
+    const [order, setOrder] = useState('desc');
+    const [orderBy, setOrderBy] = useState('playerED');
+    let playersData = [];
 
     const handleRequestSort = (event, property) => {
         const isAsc = orderBy === property && order === 'asc';
         setOrder(isAsc ? 'desc' : 'asc');
         setOrderBy(property);
     };
+
+    useEffect(() => {
+        axios.get(`http://localhost:4000/getAllUsersData`)
+            .then(response => {
+                playersData = response.data;
+                initializeRows();
+            }).catch(err => {
+                console.log(err);
+            });
+
+    }, []);
+
+    function initializeRows() {
+        let currentUserDataToAdd;
+        let userStatsLength;
+        let tempUserRow =[];
+        playersData.forEach(currentPlayerData => {
+            userStatsLength = currentPlayerData.userStatsRecord.length;
+            currentUserDataToAdd = {
+                playerID: currentPlayerData.userCredentials.activisionId,
+                playerName : currentPlayerData.userCredentials.userName,
+                playerED : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.kdRatio,
+                playerBestMatchElim : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.bestMatchKills,
+                playerEPG : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.killsPerMatch,
+                playerWinPercentage : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.winPercent,
+                playerAccuracy : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.accuracy.percent,
+                playerHSAccuracy : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.headshotAccuracy.percent,
+                playerGamesPlayed : currentPlayerData.userStatsRecord[userStatsLength - 1].stats.totalMatches
+            };
+            tempUserRow.push(currentUserDataToAdd);
+        });
+    
+        setRows(tempUserRow);
+    
+        // createData(5732522, 'Viktor', 1.43, 51, 15.78, 42.80, 16.70, 19.80, 194),
+        // createData(8694763, 'JarringStream43', 1.45, 55, 14.23, 43.90, 18.00, 16.60, 221),
+        // createData(3729397, 'shlomile', 1.28, 67, 15.73, 43.90, 15.60, 15.70, 289),
+        // createData(9612709, 'vAKN1N', 1.20, 41, 11.70, 46.10, 18.20, 35.40, 178),
+        // createData(5632400, 'harel62', 1.22, 30, 8.41, 32.30, 13.70, 17.40, 96),
+        // createData(8094996, 'Hatch97', 1.05, 41, 11.21, 43.10, 17.40, 8.30, 130),
+        // createData(7300902, 'iNo Eliran2508', 0.99, 26, 6.14, 30.60, 26.50, 22.40, 98),
+        // createData(21965, 'MOSHE', 0.88, 36, 10.49, 50.50, 10.00, 6.80, 109),
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -243,9 +264,9 @@ export default function EnhancedTable() {
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerED}</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerBestMatchElim}</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerEPG}</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerWinPercentage} %</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerAccuracy} %</TableCell>
-                                            <TableCell align="center" className={classes.cellDesign}>{row.playerHSAccuracy} %</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerWinPercentage}</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerAccuracy}</TableCell>
+                                            <TableCell align="center" className={classes.cellDesign}>{row.playerHSAccuracy}</TableCell>
                                             <TableCell align="center" className={classes.cellDesign}>{row.playerGamesPlayed}</TableCell>
                                         </TableRow>
                                     );
