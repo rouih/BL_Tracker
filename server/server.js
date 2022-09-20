@@ -118,6 +118,16 @@ app.get('/refreshUsersStats', async (req, res) => {
 });
 
 
+app.get('/getAllUsersData', async (req, res) => {
+    const usersData = await UsersFileManager.getAllUsersData();
+    if (!usersData) {
+        return res.status(400).send("Failed to get users data");
+    }
+
+    return res.send(usersData);
+});
+
+
 
 const getAllUsersCredentials = async () => {
     const usersData = await UsersFileManager.getAllUsersData();
@@ -130,6 +140,7 @@ const getAllUsersCredentials = async () => {
 
 const fetchUserData = async (userCredentials) => {
     const { userName, activisionId, platform } = userCredentials;
+    console.log(userName, activisionId, platform);
     try {
         const { data } = await axios.get(`https://call-of-duty-vanguard.p.rapidapi.com/${platform}/user/${userName}#${activisionId}`, {
             headers: {

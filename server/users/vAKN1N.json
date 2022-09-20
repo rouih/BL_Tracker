@@ -1,0 +1,42 @@
+{
+  "userCredentials": {
+    "userName": "vAKN1N",
+    "activisionId": "9612709",
+    "platform": "battle"
+  },
+  "userImg": "",
+  "userStatsRecord": [
+    {
+      "time": "2022-09-17T18:12:03.809Z",
+      "stats": {
+        "playTime": "20h",
+        "totalMatches": "185",
+        "kdRatio": "1.20",
+        "winPercent": "46.0%",
+        "scorePerMinute": "270",
+        "bestMatchKills": "41",
+        "killCount": "2,178",
+        "deathCount": "2,377",
+        "assistCount": "679",
+        "headshotCount": "764",
+        "headshotPercent": "35.1%",
+        "suicideCount": "15",
+        "killsPerMatch": "11.77",
+        "killsPerMinute": "1.73",
+        "winCount": "85",
+        "lossCount": "88",
+        "score": "339,421",
+        "scorePerMatch": "1835",
+        "accuracy": {
+          "percent": "18.3%",
+          "hits": "8,402",
+          "misses": "37,620"
+        },
+        "headshotAccuracy": {
+          "percent": "35.1%",
+          "headshots": "764"
+        }
+      }
+    }
+  ]
+}

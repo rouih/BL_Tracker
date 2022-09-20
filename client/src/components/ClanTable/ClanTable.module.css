@@ -1,0 +1,36 @@
+@font-face {
+    font-family: Rajdhani;
+    src: url('../../assets/Rajdhani-Bold.ttf');
+}
+
+.tableDesign {
+    background-color: #171A15;
+    color: white !important;
+    font-family: Rajdhani !important;
+}
+
+.titleDesign {
+    background-color: #171A15;
+    font-family: Rajdhani !important;
+    font-size: 32px !important;
+    color: white;
+}
+
+.cellDesign {
+    color: white !important;
+    font-family: Rajdhani !important;
+}
+
+.sortDesign {
+    color: white !important;
+    font-family: Rajdhani !important;
+}
+
+.activeSortDesign {
+    color: red !important;
+    font-family: Rajdhani !important;
+}
+
+.css-1qgma8u-MuiButtonBase-root-MuiTableSortLabel-root.Mui-active .MuiTableSortLabel-icon {
+    color: red !important ;
+}
