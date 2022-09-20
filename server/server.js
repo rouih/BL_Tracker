@@ -119,7 +119,7 @@ app.get('/refreshUsersStats', async (req, res) => {
 
 
 app.get('/getAllUsersData', async (req, res) => {
-    const usersData = await getAllUsersData();
+    const usersData = await UsersFileManager.getAllUsersData();
     if (!usersData) {
         return res.status(400).send("Failed to get users data");
     }
