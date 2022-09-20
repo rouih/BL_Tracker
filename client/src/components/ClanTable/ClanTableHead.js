@@ -8,6 +8,7 @@ import Box from '@mui/material/Box';
 import { visuallyHidden } from '@mui/utils';
 import classes from './ClanTable.module.css';
 
+// All the categories (epg, e/d etc.. )
 const headCells = [
     {
         id: 'playerID',

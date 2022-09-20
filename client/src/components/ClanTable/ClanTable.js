@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Box from '@mui/material/Box';
 import Table from '@mui/material/Table';
-import ClanTableHead from './ClanTableHead'; 
-import ClanTableToolbar from './ClanTableToolbar';
+import ClanTableHead from './ClanTableHead';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableContainer from '@mui/material/TableContainer';
@@ -10,6 +9,7 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import classes from './ClanTable.module.css';
 import axios from 'axios';
+import { Toolbar } from '@mui/material';
 
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
@@ -41,9 +41,6 @@ function stableSort(array, comparator) {
     return stabilizedThis.map((el) => el[0]);
 }
 
-
-
-
 export default function ClanTable() {
     const [rows, setRows] = useState([])
     const [order, setOrder] = useState('desc');
@@ -52,15 +49,15 @@ export default function ClanTable() {
 
     useEffect(() => {
         axios.get(`http://localhost:4000/getAllUsersData`)
-        .then(response => {
-            playersData = response.data;
-            initializeRows();
-        }).catch(err => {
-            console.log(err);
-        });
-        
+            .then(response => {
+                playersData = response.data;
+                initializeRows();
+            }).catch(err => {
+                console.log(err);
+            });
+
     }, []);
-    
+
     function initializeRows() {
         let currentUserDataToAdd;
         let userStatsLength;
@@ -80,7 +77,7 @@ export default function ClanTable() {
             };
             tempUserRow.push(currentUserDataToAdd);
         });
-        
+
         setRows(tempUserRow);
     }
 
@@ -93,7 +90,9 @@ export default function ClanTable() {
     return (
         <Box sx={{ width: '100%' }}>
             <Paper sx={{ width: '100%', mb: 2 }}>
-                <ClanTableToolbar />
+                <Toolbar className={classes.titleDesign}>
+                    BL Clan
+                </Toolbar>
                 <TableContainer>
                     <Table
                         sx={{ minWidth: 750 }}
