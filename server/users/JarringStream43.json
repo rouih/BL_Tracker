@@ -1,0 +1,74 @@
+{
+  "userCredentials": {
+    "userName": "JarringStream43",
+    "activisionId": "8694763",
+    "platform": "xbl"
+  },
+  "userImg": "",
+  "userStatsRecord": [
+    {
+      "time": "2022-09-17T18:12:03.809Z",
+      "stats": {
+        "playTime": "27h",
+        "totalMatches": "228",
+        "kdRatio": "1.45",
+        "winPercent": "43.4%",
+        "scorePerMinute": "319",
+        "bestMatchKills": "55",
+        "killCount": "3,244",
+        "deathCount": "2,827",
+        "assistCount": "848",
+        "headshotCount": "548",
+        "headshotPercent": "16.9%",
+        "suicideCount": "15",
+        "killsPerMatch": "14.23",
+        "killsPerMinute": "1.94",
+        "winCount": "99",
+        "lossCount": "108",
+        "score": "532,552",
+        "scorePerMatch": "2,336",
+        "accuracy": {
+          "percent": "17.9%",
+          "hits": "6,194",
+          "misses": "28,361"
+        },
+        "headshotAccuracy": {
+          "percent": "16.9%",
+          "headshots": "548"
+        }
+      }
+    },
+    {
+      "time": "2022-09-17T18:13:22.447Z",
+      "stats": {
+        "playTime": "27h",
+        "totalMatches": "228",
+        "kdRatio": "1.45",
+        "winPercent": "43.4%",
+        "scorePerMinute": "319",
+        "bestMatchKills": "55",
+        "killCount": "3,244",
+        "deathCount": "2,827",
+        "assistCount": "848",
+        "headshotCount": "548",
+        "headshotPercent": "16.9%",
+        "suicideCount": "15",
+        "killsPerMatch": "14.23",
+        "killsPerMinute": "1.94",
+        "winCount": "99",
+        "lossCount": "108",
+        "score": "532,552",
+        "scorePerMatch": "2,336",
+        "accuracy": {
+          "percent": "17.9%",
+          "hits": "6,194",
+          "misses": "28,361"
+        },
+        "headshotAccuracy": {
+          "percent": "16.9%",
+          "headshots": "548"
+        }
+      }
+    }
+  ]
+}
