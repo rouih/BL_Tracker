@@ -1,10 +1,10 @@
 import './App.css';
-import EnhancedTable from './components/ClanTable/ClanTable';
+import ClanTable from './components/ClanTable/ClanTable.js';
 import * as React from 'react';
 function App() {
   return (
     <div>
-      <EnhancedTable/>
+      <ClanTable/>
     </div>
   );
 }
